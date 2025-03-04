@@ -53,3 +53,6 @@ Start the development server with hot-reloading:
 ```
 npm run dev
 ```
+
+Check out the postman documentation
+https://documenter.getpostman.com/view/39517923/2sAYdkFoPa
