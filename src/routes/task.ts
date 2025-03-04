@@ -14,7 +14,7 @@ taskRouter.get('/', authMiddleWare, getAllTasksController);
 taskRouter.get('/:id', authMiddleWare, joiMiddleware(getTaskValidator), getTaskController);
 taskRouter.post('/', authMiddleWare, joiMiddleware(createTaskValidator), createTaskController);
 taskRouter.put('/:id', authMiddleWare, joiMiddleware(updateTaskValidator), updateTaskController);
-taskRouter.put('/:id', authMiddleWare, joiMiddleware(getTaskValidator), toggleCompleteTaskController);
+taskRouter.put('/complete/:id', authMiddleWare, toggleCompleteTaskController);
 taskRouter.delete('/:id', authMiddleWare, joiMiddleware(getTaskValidator), deleteTaskController);
 
 export default taskRouter;
