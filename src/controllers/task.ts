@@ -37,6 +37,8 @@ export const createTaskController = async (
         task: req.body.task,
         user: res.locals.user,
     };
+    // console.log(res.locals.user);
+
     const response = await taskFactory().createTask(input);
     return res.status(response.code).json(response);
 }
@@ -52,6 +54,19 @@ export const updateTaskController = async (
         user: res.locals.user,
     };
     const response = await taskFactory().updateTask(input);
+    return res.status(response.code).json(response);
+}
+
+export const toggleCompleteTaskController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const input: IGetTask = {
+        id: req.params.id,
+        user: res.locals.user,
+    };
+    const response = await taskFactory().toggleCompleted(input);
     return res.status(response.code).json(response);
 }
 

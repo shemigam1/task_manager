@@ -4,35 +4,35 @@ import { ReturnStatus } from "../../types/generic"
 import { ICreateTask, IGetAll, IGetTask, IUpdateTask } from "../../types/tasks"
 
 class Task {
-    public errorResponse(message: string) {
-        ResultFunction(
-            false,
-            message,
-            500,
-            ReturnStatus.NOT_OK,
-            null
-        )
-    }
+    // public errorResponse(message: string) {
+    //     ResultFunction(
+    //         false,
+    //         message,
+    //         500,
+    //         ReturnStatus.NOT_OK,
+    //         null
+    //     )
+    // }
 
-    public notFound(message: string) {
-        return ResultFunction(
-            false,
-            message,
-            404,
-            ReturnStatus.BAD_REQUEST,
-            null
-        )
-    }
+    // public notFound(message: string) {
+    //     return ResultFunction(
+    //         false,
+    //         message,
+    //         404,
+    //         ReturnStatus.BAD_REQUEST,
+    //         null
+    //     )
+    // }
 
-    public successResponse(message: string, data: any) {
-        return ResultFunction(
-            true,
-            message,
-            200,
-            ReturnStatus.OK,
-            data
-        )
-    }
+    // public successResponse(message: string, data: any) {
+    //     return ResultFunction(
+    //         true,
+    //         message,
+    //         200,
+    //         ReturnStatus.OK,
+    //         data
+    //     )
+    // }
 
     public async getAllTasks(input: IGetAll) {
         const { user } = input
@@ -79,18 +79,18 @@ class Task {
     public async getTask(input: IGetTask) {
         const { id, user } = input
 
-        if (!id || id === "") {
-            return ResultFunction(
-                false,
-                'Task id is required',
-                500,
-                ReturnStatus.BAD_REQUEST,
-                null
-            )
-        }
+        // if (!id || id === "") {
+        //     return ResultFunction(
+        //         false,
+        //         'Task id is required',
+        //         500,
+        //         ReturnStatus.BAD_REQUEST,
+        //         null
+        //     )
+        // }
 
         try {
-            const task = prisma.task.findUnique({
+            const task = await prisma.task.findUnique({
                 where: {
                     id: id,
                     userId: user.id
@@ -98,7 +98,13 @@ class Task {
             })
 
             if (!task) {
-                this.notFound('Task not Found!')
+                return ResultFunction(
+                    false,
+                    'Task not found',
+                    500,
+                    ReturnStatus.NOT_OK,
+                    null
+                )
             }
             return ResultFunction(
                 true,
@@ -108,7 +114,7 @@ class Task {
                 task
             )
         } catch (error) {
-            // return this.errorResponse('Something went wrong!')
+            console.log(error);
 
             return ResultFunction(
                 false,
@@ -123,15 +129,15 @@ class Task {
     public async createTask(input: ICreateTask) {
         const { user, task } = input
 
-        if (!task || task === "") {
-            return ResultFunction(
-                false,
-                'Task is required',
-                500,
-                ReturnStatus.NOT_OK,
-                null
-            )
-        }
+        // if (!task || task === "") {
+        //     return ResultFunction(
+        //         false,
+        //         'Task is required',
+        //         500,
+        //         ReturnStatus.NOT_OK,
+        //         null
+        //     )
+        // }
 
         try {
             const createdTask = await prisma.task.create({
@@ -150,7 +156,7 @@ class Task {
             )
 
         } catch (error) {
-            // return this.errorResponse('Something went wrong!')
+            console.log(error);
 
             return ResultFunction(
                 false,
@@ -165,24 +171,24 @@ class Task {
     public async updateTask(input: IUpdateTask) {
         const { user, id, task } = input
 
-        if (!id || id === "") {
-            return ResultFunction(
-                false,
-                'Id of task is required!',
-                500,
-                ReturnStatus.NOT_OK,
-                null
-            )
-        }
-        if (!task || task === '') {
-            return ResultFunction(
-                false,
-                'Task is required!',
-                500,
-                ReturnStatus.NOT_OK,
-                null
-            )
-        }
+        // if (!id || id === "") {
+        //     return ResultFunction(
+        //         false,
+        //         'Id of task is required!',
+        //         500,
+        //         ReturnStatus.NOT_OK,
+        //         null
+        //     )
+        // }
+        // if (!task || task === '') {
+        //     return ResultFunction(
+        //         false,
+        //         'Task is required!',
+        //         500,
+        //         ReturnStatus.NOT_OK,
+        //         null
+        //     )
+        // }
 
         try {
             const updatedTask = await prisma.task.update({
@@ -197,12 +203,13 @@ class Task {
 
             return ResultFunction(
                 true,
-                'Task updates successfully!',
+                'Task updated successfully!',
                 200,
                 ReturnStatus.OK,
                 updatedTask
             )
         } catch (error) {
+            console.log(error);
             return ResultFunction(
                 false,
                 'Something went wrong!',
@@ -216,15 +223,15 @@ class Task {
     public async deleteTask(input: IGetTask) {
         const { id, user } = input
 
-        if (!id || id === "") {
-            return ResultFunction(
-                false,
-                'Id of task is required!',
-                500,
-                ReturnStatus.NOT_OK,
-                null
-            )
-        }
+        // if (!id || id === "") {
+        //     return ResultFunction(
+        //         false,
+        //         'Id of task is required!',
+        //         500,
+        //         ReturnStatus.NOT_OK,
+        //         null
+        //     )
+        // }
 
         try {
             await prisma.task.delete({
@@ -236,12 +243,73 @@ class Task {
 
             return ResultFunction(
                 true,
-                'Delete successful!',
+                'Delete successfull!',
                 200,
                 ReturnStatus.OK,
                 null
             )
         } catch (error) {
+            console.log(error);
+            return ResultFunction(
+                false,
+                'Something went wrong!',
+                500,
+                ReturnStatus.NOT_OK,
+                null
+            )
+        }
+    }
+
+    public async toggleCompleted(input: IGetTask) {
+        const { id, user } = input
+
+        // if (!id || id === "") {
+        //     return ResultFunction(
+        //         false,
+        //         'Id of task is required!',
+        //         500,
+        //         ReturnStatus.NOT_OK,
+        //         null
+        //     )
+        // }
+
+        try {
+            const task = await prisma.task.findUnique({
+                where: {
+                    id: id,
+                    userId: user.id
+                }
+            })
+            if (task) {
+
+                const updatedTask = await prisma.task.update({
+                    where: {
+                        id: id,
+                        userId: user.id
+                    },
+                    data: {
+                        completed: !task.completed
+                    }
+                })
+                return ResultFunction(
+                    true,
+                    'Task updated successfully!',
+                    200,
+                    ReturnStatus.OK,
+                    updatedTask
+                )
+            }
+            return ResultFunction(
+                false,
+                'Something went wrong!',
+                500,
+                ReturnStatus.NOT_OK,
+                null
+            )
+
+        } catch (error) {
+            console.log(error);
+
             return ResultFunction(
                 false,
                 'Something went wrong!',
