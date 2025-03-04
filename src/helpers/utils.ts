@@ -20,7 +20,7 @@ export const ResultFunction = <T>(
 export const signJwt = (user: any) => {
 	try {
 		const token = jwt.sign({ id: user.id }, config.JWT_SECRET, {
-			expiresIn: '1h',
+			// expiresIn: '1h',
 		});
 		return token;
 	} catch (error) {
