@@ -28,12 +28,13 @@ A simple task management API built with TypeScript, Node.js, and Prisma. This pr
 2. **Create a .env file in the project root with the following content:**
 
 ```
-DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/task_manager_db?schema=public"
+DATABASE_URL="postgresql://USER:PASSWORD@localhost:5434/task_manager_db?schema=public"
 PORT=3000
 JWT_SECRET=your_jwt_secret
 ```
 
 A compose.yaml file is provided to quickly spin up a PostgreSQL instance.
+change the POSTRGES_USER and POSTGRES_PASSWD to fit the DATABASE_URL
 
 ```
 docker-compose up -d
