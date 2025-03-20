@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import authRouter from './auth';
 import { ResultFunction } from '../helpers/utils';
 import { ReturnStatus } from '../types/generic';
-import authMiddleWare from '../middlewares/authMiddleware';
+// import authMiddleWare from '../middlewares/authMiddleware';
 import taskRouter from './task';
 
 
